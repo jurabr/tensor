@@ -525,6 +525,48 @@ int compute_abf(double x, double y, long *mat, double *a, double *b, double *f)
   return(0);
 }
 
+/* computes sums of a, b, f divided by numbers */
+int compute_g_abf(FILE *fw)
+{
+  double a0 = 0.0 ; 
+  double a1 = 0.0 ; 
+  double b0 = 0.0 ;
+  double b1 = 0.0 ;
+  double f0 = 0.0 ;
+  double f1 = 0.0 ;
+  double num_0 = 0 ;
+  double num_1 = 0 ;
+  double sum = 0 ;
+  long i ;
+
+  for (i=0; i<ts_len; i++)
+  {
+    if (ts_mat[i] == 0)
+    {
+      a0 += ts_a[i] ;
+      b0 += ts_b[i] ;
+      f0 += ts_f[i] ;
+      num_0 += 1 ;
+    }
+    else /* mat 1 */
+    {
+      a1 += ts_a[i] ;
+      b1 += ts_b[i] ;
+      f1 += ts_f[i] ;
+      num_1 += 1 ;
+    }
+  }
+  sum = num_0+num_1 ;
+
+  fprintf(fw,"\nWeighted tensor scale:\n");
+  fprintf(fw," a0 =%f, b0= %f, fi0= %f, ratio0 = %f\n",
+      a0/num_0,b0/num_0,f0/num_0,num_0/sum);
+  fprintf(fw," a1 =%f, b1= %f, fi1= %f, ratio1 = %f\n",
+      a1/num_1,b1/num_1,f1/num_1,num_1/sum);
+
+  return(0);
+}
+
 int comp_global(double *ksi, double *h, long mat)
 {
   long i ;
@@ -636,12 +678,7 @@ int main (int argc, char *argv[])
   comp_global(&ksi, &h, 0);
   printf("ksi  = %e. h =%e\n", ksi, h);
 
-  comp_global(&ksi2, &h2, 1);
-  printf("ksi2 = %e. h2=%e\n", ksi2, h2);
-
-#if 1
   write_data(fw) ; 
-#endif
 
   fclose(fw);
   fclose(fr);
@@ -653,6 +690,7 @@ int main (int argc, char *argv[])
     fclose(fwe);
   }
 
+  compute_g_abf(stdout) ;
 
   return(0);
 }
