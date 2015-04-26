@@ -3,7 +3,7 @@
    Date:      2005/09/17 11:57
    Author:    
 
-   Copyright (C) 2005 
+   Copyright (C) 2005 Jiri Brozovsky
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License as
@@ -53,6 +53,7 @@ double *ts_a   = NULL ;
 double *ts_b   = NULL ;
 double *ts_f   = NULL ;
 double ksi, h ;
+double ksi2, h2 ;
 
 /* computes element position */
 long  m_pos(long x, long y) 
@@ -140,8 +141,6 @@ int export_data_ufem(FILE *fw)
               );
     }
   }
-  return(0);
-
   
   return(0);
 
@@ -526,7 +525,7 @@ int compute_abf(double x, double y, long *mat, double *a, double *b, double *f)
   return(0);
 }
 
-int comp_global(double *ksi, double *h)
+int comp_global(double *ksi, double *h, long mat)
 {
   long i ;
   double ksi_i, h_i ;
@@ -536,7 +535,7 @@ int comp_global(double *ksi, double *h)
   
   for (i=0; i<ts_len; i++)
   {
-    if (ts_mat[i] == 0)
+    if (ts_mat[i] == mat)
     {
       if ((ts_a[i] != 0)&&(ts_b[i] != 0))
       {
@@ -629,11 +628,20 @@ int main (int argc, char *argv[])
     if ((fw = fopen(argv[2],"w")) == NULL) { fw = stdout ; }
     printf("[[%s]] (%li)\n", argv[2], ts_len);
   }
+  else
+  {
+    fw = stdout ;
+  }
 
-  comp_global(&ksi, &h);
-  printf("ksi = %e. h=%e\n", ksi, h);
+  comp_global(&ksi, &h, 0);
+  printf("ksi  = %e. h =%e\n", ksi, h);
 
+  comp_global(&ksi2, &h2, 1);
+  printf("ksi2 = %e. h2=%e\n", ksi2, h2);
+
+#if 1
   write_data(fw) ; 
+#endif
 
   fclose(fw);
   fclose(fr);
