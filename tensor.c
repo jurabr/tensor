@@ -537,23 +537,28 @@ int compute_g_abf(FILE *fw)
   double num_0 = 0 ;
   double num_1 = 0 ;
   double sum = 0 ;
-  long i ;
+  long i, ii, j ;
 
-  for (i=0; i<ts_len; i++)
+  for (ii=0; ii<y_div; ii++)
   {
-    if (ts_mat[i] == 0)
+    for (j=0; j<x_div; j++)
     {
-      a0 += ts_a[i] ;
-      b0 += ts_b[i] ;
-      f0 += ts_f[i] ;
-      num_0 += 1 ;
-    }
-    else /* mat 1 */
-    {
-      a1 += ts_a[i] ;
-      b1 += ts_b[i] ;
-      f1 += ts_f[i] ;
-      num_1 += 1 ;
+      i = ii*x_div + j ; /* Excludes borders: */
+      if ((ii==0)||(ii==(y_div-1))||(j==0)||(j==(x_div-1))) {continue;}
+      if (ts_mat[i] == 0)
+      {
+        a0 += ts_a[i] ;
+        b0 += ts_b[i] ;
+        f0 += ts_f[i] ;
+        num_0 += 1 ;
+      }
+      else /* mat 1 */
+      {
+        a1 += ts_a[i] ;
+        b1 += ts_b[i] ;
+        f1 += ts_f[i] ;
+        num_1 += 1 ;
+      }
     }
   }
   sum = num_0+num_1 ;
@@ -680,17 +685,18 @@ int main (int argc, char *argv[])
 
   write_data(fw) ; 
 
-  fclose(fw);
-  fclose(fr);
-
- if (argc > 3) 
+  if (argc > 3) 
   {
-    if ((fwe = fopen(argv[3],"w")) == NULL) { fw = stdout ; }
+    if ((fwe = fopen(argv[3],"w")) == NULL) { fwe = stdout ; }
     export_data_ufem(fwe);
     fclose(fwe);
   }
 
+ printf("--------------------\n");
   compute_g_abf(stdout) ;
+
+  fclose(fw);
+  fclose(fr);
 
   return(0);
 }
