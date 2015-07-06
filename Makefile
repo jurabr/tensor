@@ -36,16 +36,22 @@ DEBUG=-g -O0
 CFLAGS=$(FEATFLAGS) $(DEBUG) -Wall -ansi -pedantic 
 
 LIBS=$(FEATLIBS) -lm
+GLLIBS=-L/usr/freeware/lib32 -L/usr/lib32 -L/usr/X11R6/lib -lglut -lGLU -lGL -lX11 -lXmu
 
 OBJECTS=tensor.o
+GLOBJECTS=gltensor.o
 
 # targets:
-all: tensor
+all: tensor gltensor
 
 # main()
 tensor: $(OBJECTS)
 	$(CC) -o $(@) $(CFLAGS) $(OBJECTS) $(LIBS)  
 
+# GL/GLUT visualizer
+gltensor: $(GLOBJECTS)
+	$(CC) -o $(@) $(CFLAGS) $(GLOBJECTS) $(GLLIBS) $(LIBS)  
+
 # cleaning:
 clean:
-	-rm -f tensor *.o *.a *.gcda *.gcno *.exe core
+	-rm -f tensor gltensor *.o *.a *.gcda *.gcno *.exe core
