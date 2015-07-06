@@ -34,12 +34,63 @@ float oldZ=0;                               /* minula pozice, ze ktere se pocita
 float totZ=500;
 int   mouseX=0, mouseY=0, mouseZ=0;         /* body, ve kterych se nachazi kurzor mysi */
 int   mouseStatus=0;                        /* stav tlacitek mysi */
+float mult_x, mult_y ;
 
+void set_limits(int w, int h)
+{
+  mult_x = 0.9 / x_siz ; /* * (float)(w/h) */;
+  mult_y = 0.9 / y_siz ; /* * (float)(w/h) */;
+}
 
 /** Plots 2D grid of points */
 void plot_structure()
 {
-  /* TODO */
+  int i, j, ii, sum ;
+  float dx, dy ;
+  float sdx, sdy ;
+  float sdx1, sdy1 ;
+
+  dx = x_siz / (float)x_div ;
+  dy = y_siz / (float)y_div ;
+
+  ii = 0 ;
+  sum = 0 ;
+  
+  /* plots data: */
+  for (j=0; j<y_div; j++)
+  {
+    for (i=0; i<x_div; i++)
+    {
+      sdx  = 0.05 + (float)i * dx*mult_x ;
+      sdx1 = 0.05 + (float)(i+1) * dx*mult_x ;
+      sdy  = -0.05 + (float)j * dy*mult_y ;
+      sdy1 = -0.05 + (float)(j+1) * dy*mult_y ;
+#if 1
+      printf ("(x,y) = (%f, %f)\n",sdx,sdy);
+#endif
+
+      glBegin(GL_TRIANGLES);
+       switch (m_fld[ii])
+       {
+         case 1: glColor3f(0.3, 0.3, 0.3); break ;
+         case 0: glColor3f(0.3, 0.1, 0.1); break ;
+         case -1:
+         default:
+                 glColor3f(1.0, 1.0, 1.0); break ;
+       }
+        glVertex2f(sdx, sdy);
+        glVertex2f(sdx1, sdy);
+        glVertex2f(sdx1, sdy1);
+
+        glVertex2f(sdx, sdy);
+        glVertex2f(sdx, sdy1);
+        glVertex2f(sdx1, sdy1);
+      glEnd();
+
+      ii++;
+    }
+    sum++;
+  }
 }
 
 void plot_stuff(void)
@@ -52,9 +103,8 @@ void plot_stuff(void)
     glTranslatef(0.0f, 0.0f, -2.0f);       /* posun modelu dale od kamery */
     glTranslatef(0.0f, 0.0f, (newZ-oldZ)/totZ*50.0);
 
-#if 0
     plot_structure() ;
-#endif
+#if 1
     glBegin(GL_TRIANGLES);
       glColor3f(0.6, 0.6, 0.0);                 
 
@@ -62,6 +112,7 @@ void plot_stuff(void)
       glVertex3f(0.5,0.0,0.0);
       glVertex3f(0.0,0.5,0.0);
     glEnd();
+#endif
 
     glFlush(); 
     glutSwapBuffers(); 
@@ -96,6 +147,8 @@ void onResize(int w, int h)
     glLoadIdentity();                       /* nastaveni perspektivni projekce */
     gluPerspective(45.0, (double)w/(double)h, 0.1, 200.0);
     glMatrixMode(GL_MODELVIEW);             /* zmena modelove matice */
+
+    set_limits(w, h);
 }
 
 void resetPos(void)
