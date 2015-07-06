@@ -38,11 +38,14 @@ CFLAGS=$(FEATFLAGS) $(DEBUG) -Wall -ansi -pedantic
 LIBS=$(FEATLIBS) -lm
 GLLIBS=-L/usr/freeware/lib32 -L/usr/lib32 -L/usr/X11R6/lib -lglut -lGLU -lGL -lX11 -lXmu
 
-OBJECTS=tensor.o
-GLOBJECTS=gltensor.o
+OBJECTS=tensor.o tensor_io.o
+GLOBJECTS=gltensor.o tensor_io.o 
 
 # targets:
 all: tensor gltensor
+
+tensor.o: tensor.h tensor.c tensor_io.c
+gltensor.o: tensor.h gltensor.c tensor_io.c
 
 # main()
 tensor: $(OBJECTS)
