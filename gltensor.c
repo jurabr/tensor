@@ -39,7 +39,7 @@ float mult_x, mult_y ;
 void set_limits(int w, int h)
 {
   mult_x = 0.9 / x_siz ; /* * (float)(w/h) */;
-  mult_y = 0.9 / y_siz ; /* * (float)(w/h) */;
+  mult_y = 0.9 / y_siz * (float)(w/h) ;
 }
 
 /** Plots 2D grid of points */
@@ -63,8 +63,8 @@ void plot_structure()
     {
       sdx  = 0.05 + (float)i * dx*mult_x ;
       sdx1 = 0.05 + (float)(i+1) * dx*mult_x ;
-      sdy  = -0.05 + (float)j * dy*mult_y ;
-      sdy1 = -0.05 + (float)(j+1) * dy*mult_y ;
+      sdy  = 0.95 - + (float)j * dy*mult_y ;
+      sdy1 = 0.95 - + (float)(j+1) * dy*mult_y ;
 #if 1
       printf ("(x,y) = (%f, %f)\n",sdx,sdy);
 #endif
@@ -95,24 +95,16 @@ void plot_structure()
 
 void plot_stuff(void)
 {
+  float zoom = 1.0; 
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT); /* vymazani barvoveho bufferu */
     glMatrixMode(GL_MODELVIEW);             /* bude se menit modelova matice */
     glLoadIdentity();                       /* nahrat jednotkovou matici */
 
     glTranslatef(newmX/180, -newmY/180, 0);        /* posun sipky */
-    glTranslatef(0.0f, 0.0f, -2.0f);       /* posun modelu dale od kamery */
-    glTranslatef(0.0f, 0.0f, (newZ-oldZ)/totZ*50.0);
+    zoom = 1.0 - (newZ-oldZ)/totZ ;
+    glScalef(zoom, zoom, zoom);
 
     plot_structure() ;
-#if 1
-    glBegin(GL_TRIANGLES);
-      glColor3f(0.6, 0.6, 0.0);                 
-
-      glVertex3f(-0.5,-0.5,0.0);
-      glVertex3f(0.5,0.0,0.0);
-      glVertex3f(0.0,0.5,0.0);
-    glEnd();
-#endif
 
     glFlush(); 
     glutSwapBuffers(); 
@@ -145,8 +137,13 @@ void onResize(int w, int h)
     glViewport(0, 0, w, h);                 /* viditelna oblast */
     glMatrixMode(GL_PROJECTION);            /* zmena projekcni matice */
     glLoadIdentity();                       /* nastaveni perspektivni projekce */
+#if 0
     gluPerspective(45.0, (double)w/(double)h, 0.1, 200.0);
+#else
+	  glOrtho(0,1, 0,1, -1,1);
+#endif
     glMatrixMode(GL_MODELVIEW);             /* zmena modelove matice */
+	  glLoadIdentity(); 
 
     set_limits(w, h);
 }
