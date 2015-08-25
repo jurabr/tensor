@@ -1,0 +1,28 @@
+!* SAMPLE initeial data for tensor-generated mesh
+
+clear,all,all
+et,1,2
+rs,1,2
+r,height,1,0.3
+
+mat,1,1
+mp,ex,1,10e3
+mp,prxy,1,0.2
+
+mat,2,1
+mp,ex,2,1e3
+mp,prxy,2,0.2
+
+!* do input of tensor-generated mesh here:
+!in,m20.mac
+
+!* example of supports
+!nsel,s,loc,y,0
+!d,all,uy
+!nselr,r,loc,x,0
+!d,all,ux
+!
+!nsel,s,loc,y,2.86,2.90
+d,all,uy,-0.001
+!
+!nsel,all
