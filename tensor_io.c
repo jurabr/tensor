@@ -120,10 +120,10 @@ int export_data_ufem(FILE *fw)
 
       fprintf(fw,"e,%li,%li,%li,%li,%li\n",
              e_num,
-             (i+1) + (y_div+1)*(j+1), 
-             (i+2) + (y_div+1)*(j+1),
-             (i+2) + (y_div+1)*(j), 
-             (i+1) + (y_div+1)*(j)
+             (i+1) + (x_div+1)*(j+1), 
+             (i+2) + (x_div+1)*(j+1),
+             (i+2) + (x_div+1)*(j), 
+             (i+1) + (x_div+1)*(j)
               );
     }
   }

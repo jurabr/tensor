@@ -32,7 +32,8 @@ AR=ar r
 RANLIB=-ranlib
 LD=ld
 
-DEBUG=-g -O0 
+#DEBUG=-g -O0 
+DEBUG=-O3 
 CFLAGS=$(FEATFLAGS) $(DEBUG) -Wall -ansi -pedantic 
 
 LIBS=$(FEATLIBS) -lm

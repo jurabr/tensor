@@ -45,8 +45,8 @@ int cih_x = 29 ;
 int cih_y = 7  ;
 int malt  = 1  ;
 
-int num_x = 2 ;
-int num_y = 3 ;
+int num_x = 5 ;
+int num_y = 9 ;
 
 int sizex =  0 ;
 int sizey =  0 ;
