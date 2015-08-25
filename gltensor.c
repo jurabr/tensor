@@ -34,12 +34,15 @@ float oldZ=0;                               /* minula pozice, ze ktere se pocita
 float totZ=500;
 int   mouseX=0, mouseY=0, mouseZ=0;         /* body, ve kterych se nachazi kurzor mysi */
 int   mouseStatus=0;                        /* stav tlacitek mysi */
+int   win_x, win_y ;
 float mult_x, mult_y ;
 
 void set_limits(int w, int h)
 {
   mult_x = 0.9 / x_siz ; /* * (float)(w/h) */;
   mult_y = 0.9 / y_siz * (float)(w/h) ;
+  win_x = w ;
+  win_y = h ;
 }
 
 /** Plots 2D grid of points */
@@ -65,7 +68,7 @@ void plot_structure()
       sdx1 = 0.05 + (float)(i+1) * dx*mult_x ;
       sdy  = 0.95 - + (float)j * dy*mult_y ;
       sdy1 = 0.95 - + (float)(j+1) * dy*mult_y ;
-#if 1
+#if 0
       printf ("(x,y) = (%f, %f)\n",sdx,sdy);
 #endif
 
@@ -100,7 +103,7 @@ void plot_stuff(void)
     glMatrixMode(GL_MODELVIEW);             /* bude se menit modelova matice */
     glLoadIdentity();                       /* nahrat jednotkovou matici */
 
-    glTranslatef(newmX/180, -newmY/180, 0);        /* posun sipky */
+    glTranslatef(newmX/win_x, -newmY/win_y, 0);        /* posun sipky */
     zoom = 1.0 - (newZ-oldZ)/totZ ;
     glScalef(zoom, zoom, zoom);
 

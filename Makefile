@@ -40,12 +40,14 @@ GLLIBS=-L/usr/freeware/lib32 -L/usr/lib32 -L/usr/X11R6/lib -lglut -lGLU -lGL -lX
 
 OBJECTS=tensor.o tensor_io.o
 GLOBJECTS=gltensor.o tensor_io.o 
+GENOBJECTS=gen.o 
 
 # targets:
 all: tensor gltensor
 
 tensor.o: tensor.h tensor.c tensor_io.c
 gltensor.o: tensor.h gltensor.c tensor_io.c
+gen.o: gen.c
 
 # main()
 tensor: $(OBJECTS)
@@ -55,6 +57,10 @@ tensor: $(OBJECTS)
 gltensor: $(GLOBJECTS)
 	$(CC) -o $(@) $(CFLAGS) $(GLOBJECTS) $(GLLIBS) $(LIBS)  
 
+# data generator (rectangle):
+gen: $(GENOBJECTS)
+	$(CC) -o $(@) $(CFLAGS) $(GENOBJECTS) $(LIBS)  
+
 # cleaning:
 clean:
-	-rm -f tensor gltensor *.o *.a *.gcda *.gcno *.exe core
+	-rm -f tensor gltensor gen *.o *.a *.gcda *.gcno *.exe core

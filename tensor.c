@@ -521,6 +521,8 @@ int main (int argc, char *argv[])
 
   if (read_data (fr) != 0) { exit (-1); }
 
+  if ((y_div <24)&&(x_div<70))
+  {
   fprintf(msgout,"\ninput data:\n");
   for (j=0; j<y_div; j++)
   {
@@ -533,6 +535,7 @@ int main (int argc, char *argv[])
 #endif
     }
     fprintf(msgout,"\n");
+  }
   }
 
   if (alloc_big_data ()  != 0) { exit (-1); }
