@@ -515,7 +515,11 @@ int main (int argc, char *argv[])
 
   if (argc > 1) 
   {
-    if ((fr = fopen(argv[1],"r")) == NULL) { exit (-1) ; }
+    if ((fr = fopen(argv[1],"r")) == NULL) 
+    { 
+      fprintf(stderr,"Tensor Scale Analysis:\n Use: %s input_file output_file fea_file\n",argv[0]);
+      exit (-1) ; 
+    }
   }
 
 
